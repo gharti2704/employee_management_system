@@ -47,4 +47,27 @@ public class EmployeeServiceImplementation implements EmployeeService {
         // Lambda expression with method reference
         return employees.stream().map(EmployeeMapper::mapToEmployeeDto).collect(Collectors.toList());
     }
+
+    @Override
+    public EmployeeDto updateEmployee(Long id, EmployeeDto updateDetails) {
+
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee doesn't exist with the given id: " + id));
+
+        employee.setFirstName(updateDetails.getFirstName());
+        employee.setLastName(updateDetails.getLastName());
+        employee.setEmail(updateDetails.getEmail());
+
+        Employee updatedEmployee = employeeRepository.save(employee);
+
+        return EmployeeMapper.mapToEmployeeDto(updatedEmployee);
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee doesn't exist with the given id: " + id));
+
+        employeeRepository.deleteById(id);
+    }
 }
