@@ -9,12 +9,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/employee/")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
     private EmployeeService employeeService;
+
+    @GetMapping
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
+        List<EmployeeDto> employeeDtoList = employeeService.getAllEmployees();
+
+        return ResponseEntity.ok(employeeDtoList);
+    }
 
     @PostMapping("create")
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto){
@@ -28,13 +36,6 @@ public class EmployeeController {
         EmployeeDto employeeDto = employeeService.getEmployeeById(id);
 
         return ResponseEntity.ok(employeeDto);
-    }
-
-    @GetMapping("all")
-    public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
-        List<EmployeeDto> employeeDtoList = employeeService.getAllEmployees();
-
-        return ResponseEntity.ok(employeeDtoList);
     }
 
     @PutMapping("{id}/update")
